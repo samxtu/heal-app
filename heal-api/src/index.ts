@@ -22,6 +22,7 @@ import { RoleResolver } from "./resolvers/role";
 import { UserResolver } from "./resolvers/user";
 
 const main = async () => {
+
   const conn = await createConnection({
     type: DB_TYPE,
     database: DB_NAME,
@@ -36,7 +37,7 @@ const main = async () => {
     },
   });
 
-  // await conn.runMigrations();
+  // await conn.runMigrations() here;
 
   console.log("Connected to db: ", conn.isConnected);
   const app = express();
