@@ -1,0 +1,11 @@
+query getUsers($roles: [Float!]) {
+  getUsers(roles: $roles) {
+    ...Me
+  }
+}
+
+query getUser($id: Float!) {
+  getUser(id: $id) {
+    ...Me
+  }
+}
