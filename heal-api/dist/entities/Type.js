@@ -9,32 +9,27 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Role = void 0;
+exports.Type = void 0;
 const type_graphql_1 = require("type-graphql");
 const typeorm_1 = require("typeorm");
-const User_1 = require("./User");
 const AuditBaseEntity_1 = require("./AuditBaseEntity");
-const Permission_1 = require("./Permission");
-let Role = class Role extends AuditBaseEntity_1.AuditBaseEntity {
-};
-__decorate([
-    (0, type_graphql_1.Field)(() => [User_1.User]),
-    (0, typeorm_1.OneToMany)(() => User_1.User, (user) => user.role),
-    __metadata("design:type", Array)
-], Role.prototype, "users", void 0);
-__decorate([
-    (0, type_graphql_1.Field)(() => [Permission_1.Permission]),
-    (0, typeorm_1.ManyToMany)(() => Permission_1.Permission, permission => permission.roles),
-    __metadata("design:type", Array)
-], Role.prototype, "permissions", void 0);
+const Category_1 = require("./Category");
+class Type extends AuditBaseEntity_1.AuditBaseEntity {
+}
 __decorate([
     (0, type_graphql_1.Field)(),
-    (0, typeorm_1.Column)(),
+    (0, typeorm_1.Column)({ type: "text" }),
     __metadata("design:type", String)
-], Role.prototype, "name", void 0);
-Role = __decorate([
-    (0, type_graphql_1.ObjectType)(),
-    (0, typeorm_1.Entity)()
-], Role);
-exports.Role = Role;
-//# sourceMappingURL=Role.js.map
+], Type.prototype, "name", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(),
+    (0, typeorm_1.Column)({ type: "text" }),
+    __metadata("design:type", String)
+], Type.prototype, "description", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(() => [Category_1.Category]),
+    (0, typeorm_1.OneToMany)(() => Category_1.Category, category => category.type),
+    __metadata("design:type", Array)
+], Type.prototype, "category", void 0);
+exports.Type = Type;
+//# sourceMappingURL=Type.js.map

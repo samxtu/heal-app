@@ -13,28 +13,12 @@ exports.User = void 0;
 const type_graphql_1 = require("type-graphql");
 const typeorm_1 = require("typeorm");
 const Role_1 = require("./Role");
-let User = class User extends typeorm_1.BaseEntity {
-    constructor() {
-        super(...arguments);
-        this.createdAt = new Date();
-        this.updatedAt = new Date();
-    }
+const AuditBaseEntity_1 = require("./AuditBaseEntity");
+const Category_1 = require("./Category");
+const Address_1 = require("./Address");
+const Permission_1 = require("./Permission");
+let User = class User extends AuditBaseEntity_1.AuditBaseEntity {
 };
-__decorate([
-    (0, type_graphql_1.Field)(),
-    (0, typeorm_1.PrimaryGeneratedColumn)(),
-    __metadata("design:type", Number)
-], User.prototype, "id", void 0);
-__decorate([
-    (0, type_graphql_1.Field)(() => String),
-    (0, typeorm_1.CreateDateColumn)(),
-    __metadata("design:type", Object)
-], User.prototype, "createdAt", void 0);
-__decorate([
-    (0, type_graphql_1.Field)(() => String),
-    (0, typeorm_1.UpdateDateColumn)(),
-    __metadata("design:type", Object)
-], User.prototype, "updatedAt", void 0);
 __decorate([
     (0, type_graphql_1.Field)(),
     (0, typeorm_1.Column)({ type: "text" }),
@@ -61,15 +45,15 @@ __decorate([
     __metadata("design:type", String)
 ], User.prototype, "phone", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(),
-    (0, typeorm_1.Column)({ type: "text" }),
-    __metadata("design:type", String)
-], User.prototype, "location", void 0);
+    (0, type_graphql_1.Field)(() => Address_1.Address),
+    (0, typeorm_1.ManyToOne)(() => Address_1.Address, address => address.currentUsers),
+    __metadata("design:type", Address_1.Address)
+], User.prototype, "currentAddress", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(),
-    (0, typeorm_1.Column)({ default: true }),
-    __metadata("design:type", Boolean)
-], User.prototype, "status", void 0);
+    (0, type_graphql_1.Field)(() => Address_1.Address),
+    (0, typeorm_1.ManyToOne)(() => Address_1.Address, address => address.permanentUsers),
+    __metadata("design:type", Address_1.Address)
+], User.prototype, "permanentAddress", void 0);
 __decorate([
     (0, type_graphql_1.Field)(() => Role_1.Role),
     (0, typeorm_1.ManyToOne)(() => Role_1.Role, (role) => role.users),
@@ -79,6 +63,16 @@ __decorate([
     (0, typeorm_1.Column)({ type: "text", default: "halisia" }),
     __metadata("design:type", String)
 ], User.prototype, "password", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(() => [Category_1.Category]),
+    (0, typeorm_1.ManyToMany)(() => Category_1.Category, category => category.user),
+    __metadata("design:type", Array)
+], User.prototype, "status", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(() => [Permission_1.Permission]),
+    (0, typeorm_1.ManyToMany)(() => Permission_1.Permission, permission => permission.users),
+    __metadata("design:type", Array)
+], User.prototype, "permissions", void 0);
 User = __decorate([
     (0, type_graphql_1.ObjectType)(),
     (0, typeorm_1.Entity)()

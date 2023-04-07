@@ -1,30 +1,19 @@
 import { Field, ObjectType } from "type-graphql";
 import {
-  BaseEntity,
   Column,
-  CreateDateColumn,
   Entity,
+  ManyToMany,
   ManyToOne,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
 } from "typeorm";
 import { Role } from "./Role";
+import {AuditBaseEntity} from "./AuditBaseEntity";
+import { Category } from "./Category";
+import { Address } from "./Address";
+import { Permission } from "./Permission";
 
 @ObjectType()
 @Entity()
-export class User extends BaseEntity {
-  @Field()
-  @PrimaryGeneratedColumn()
-  id!: number;
-
-  @Field(() => String)
-  @CreateDateColumn()
-  createdAt = new Date();
-
-  @Field(() => String)
-  @UpdateDateColumn()
-  updatedAt = new Date();
-
+export class User extends AuditBaseEntity {
   @Field()
   @Column({ type: "text" })
   firstname!: string;
@@ -45,13 +34,13 @@ export class User extends BaseEntity {
   @Column({ type: "text", unique: true })
   phone: string;
 
-  @Field()
-  @Column({ type: "text" })
-  location: string;
+  @Field(()=>Address)
+  @ManyToOne(()=>Address, address=>address.currentUsers)
+  currentAddress: Address;
 
-  @Field()
-  @Column({ default: true })
-  status: boolean;
+  @Field(()=>Address)
+  @ManyToOne(()=>Address, address=>address.permanentUsers)
+  permanentAddress: Address;
 
   @Field(() => Role)
   @ManyToOne(() => Role, (role) => role.users)
@@ -59,4 +48,12 @@ export class User extends BaseEntity {
 
   @Column({ type: "text", default: "halisia" })
   password: string;
+
+  @Field(()=>[Category])
+  @ManyToMany(()=>Category, category=>category.user)
+  status:Category[];
+
+  @Field(()=>[Permission])
+  @ManyToMany(()=>Permission, permission=>permission.users)
+  permissions:Permission[]
 }
