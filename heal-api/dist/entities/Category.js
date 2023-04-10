@@ -9,32 +9,32 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Role = void 0;
+exports.Category = void 0;
 const type_graphql_1 = require("type-graphql");
 const typeorm_1 = require("typeorm");
-const User_1 = require("./User");
 const AuditEntity_1 = require("./AuditEntity");
-const Permission_1 = require("./Permission");
-let Role = class Role extends AuditEntity_1.AuditBaseEntity {
+const Type_1 = require("./Type");
+const User_1 = require("./User");
+let Category = class Category extends AuditEntity_1.AuditBaseEntity {
 };
 __decorate([
-    (0, type_graphql_1.Field)(() => [User_1.User]),
-    (0, typeorm_1.OneToMany)(() => User_1.User, (user) => user.role),
-    __metadata("design:type", Array)
-], Role.prototype, "users", void 0);
-__decorate([
-    (0, type_graphql_1.Field)(() => [Permission_1.Permission]),
-    (0, typeorm_1.ManyToMany)(() => Permission_1.Permission, (permission) => permission.roles),
-    __metadata("design:type", Array)
-], Role.prototype, "permissions", void 0);
-__decorate([
     (0, type_graphql_1.Field)(),
-    (0, typeorm_1.Column)({ unique: true }),
+    (0, typeorm_1.Column)({ type: "text" }),
     __metadata("design:type", String)
-], Role.prototype, "name", void 0);
-Role = __decorate([
+], Category.prototype, "name", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(() => Type_1.Type),
+    (0, typeorm_1.ManyToOne)(() => Type_1.Type, (type) => type.category),
+    __metadata("design:type", Type_1.Type)
+], Category.prototype, "type", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(() => [User_1.User]),
+    (0, typeorm_1.ManyToMany)(() => User_1.User, (user) => user.status),
+    __metadata("design:type", Array)
+], Category.prototype, "user", void 0);
+Category = __decorate([
     (0, type_graphql_1.ObjectType)(),
     (0, typeorm_1.Entity)()
-], Role);
-exports.Role = Role;
-//# sourceMappingURL=Role.js.map
+], Category);
+exports.Category = Category;
+//# sourceMappingURL=Category.js.map

@@ -1,35 +1,21 @@
 import { Field, ObjectType } from "type-graphql";
-import {
-  BaseEntity,
-  Column,
-  CreateDateColumn,
-  Entity,
-  OneToMany,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from "typeorm";
+import { Column, Entity, ManyToMany, OneToMany } from "typeorm";
 import { User } from "./User";
+import { AuditBaseEntity } from "./AuditEntity";
+import { Permission } from "./Permission";
 
 @ObjectType()
 @Entity()
-export class Role extends BaseEntity {
-  @Field()
-  @PrimaryGeneratedColumn()
-  id!: number;
-
-  @Field(() => String)
-  @CreateDateColumn({ type: "timestamp" })
-  createdAt = new Date();
-
-  @Field(() => String)
-  @UpdateDateColumn({ type: "timestamp" })
-  updatedAt = new Date();
-
+export class Role extends AuditBaseEntity {
   @Field(() => [User])
   @OneToMany(() => User, (user) => user.role)
   users: User[];
 
+  @Field(() => [Permission])
+  @ManyToMany(() => Permission, (permission) => permission.roles)
+  permissions: Permission[];
+
   @Field()
-  @Column()
+  @Column({ unique: true })
   name!: string;
 }

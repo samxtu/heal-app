@@ -1,17 +1,36 @@
 import { isAuth } from "../middleware/isAuth";
-import { Arg, Mutation, Resolver, UseMiddleware, Query } from "type-graphql";
+import {
+  Arg,
+  Mutation,
+  Resolver,
+  UseMiddleware,
+  Query,
+  InputType,
+  Field,
+} from "type-graphql";
 import { Role } from "../entities/Role";
 import { BooleanResponse } from "./user";
+import { Permission } from "../entities/Permission";
+import { In } from "typeorm";
+
+@InputType()
+class RoleArgs {
+  @Field()
+  name: string;
+  @Field(() => [Number])
+  permissions: [number];
+}
 
 @Resolver(Role)
 export class RoleResolver {
   @Mutation(() => BooleanResponse)
   @UseMiddleware(isAuth)
-  async addRole(
-    @Arg("name", () => String) name: string
-  ): Promise<BooleanResponse> {
+  async addRole(@Arg("args") inputArgs: RoleArgs): Promise<BooleanResponse> {
     try {
-      await Role.create({ name }).save();
+      const perms = await Permission.find({
+        where: { id: In(inputArgs.permissions) },
+      });
+      await Role.create({ name: inputArgs.name, permissions: perms }).save();
     } catch (err) {
       console.error(err.message);
       return {
@@ -26,9 +45,9 @@ export class RoleResolver {
   @UseMiddleware(isAuth)
   async editRole(
     @Arg("id") id: number,
-    @Arg("name", () => String) name: string
+    @Arg("args") editArgs: RoleArgs
   ): Promise<BooleanResponse> {
-    if (!name || name === "")
+    if (!editArgs.name || editArgs.name === "")
       return {
         status: false,
         error: { target: "general", message: "name can not be empty!" },
@@ -40,7 +59,12 @@ export class RoleResolver {
         error: { target: "general", message: "role does not exist!" },
       };
     try {
-      await Role.update({ id }, { name });
+      const perms = await Permission.find({
+        where: { id: In(editArgs.permissions) },
+      });
+      role.name = editArgs.name;
+      role.permissions = perms;
+      await role.save();
     } catch (err) {
       console.error(err.message);
       return {
@@ -68,6 +92,6 @@ export class RoleResolver {
 
   @Query(() => [Role])
   getRoles(): Promise<Role[]> {
-    return Role.find({ relations: ["users"] });
+    return Role.find({ relations: ["users", "permissions"] });
   }
 }

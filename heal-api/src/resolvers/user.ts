@@ -23,6 +23,7 @@ import { v4 } from "uuid";
 import { isAuth } from "../middleware/isAuth";
 import { In } from "typeorm";
 import { isAllowed } from "../middleware/isAllowed";
+import { Permission } from "../entities/Permission";
 
 @ObjectType()
 export class FieldError {
@@ -78,10 +79,6 @@ class EditUserArgs {
   email: string;
   @Field()
   phone: string;
-  @Field()
-  location: string;
-  @Field()
-  status: boolean;
 }
 
 @ObjectType()
@@ -178,8 +175,6 @@ export class UserResolver {
         lastname: params.lastname,
         email: params.email.toLowerCase(),
         phone: params.phone,
-        location: params.location,
-        status: true,
         password: hashedPassword,
       }).save();
       console.log("user: ", user);
@@ -231,6 +226,35 @@ export class UserResolver {
     return { status: true };
   }
 
+  @Mutation(() => BooleanResponse)
+  async manageUserPermissions(
+    @Arg("id") id: number,
+    @Arg("permissions", () => [Number]) perms: number[]
+  ): Promise<BooleanResponse> {
+    const user = await User.findOne(id);
+    if (!user)
+      return {
+        status: false,
+        error: { target: "general", message: "User does not exist!" },
+      };
+
+    try {
+      const newPerms = await Permission.find({ where: { id: In(perms) } });
+      user.permissions = newPerms;
+      await user.save();
+    } catch (err) {
+      console.error("error message: ", err.message);
+      return {
+        status: false,
+        error: {
+          target: "general",
+          message: "Something went wrong, try again!",
+        },
+      };
+    }
+    return { status: true };
+  }
+
   @Mutation(() => UserResponse)
   async login(
     @Arg("params") params: EmailPasswordArgs,
@@ -257,7 +281,7 @@ export class UserResolver {
         },
       };
     }
-    if(similarUser.status === false) {
+    if (similarUser.deleted === true) {
       return {
         error: {
           target: "general",

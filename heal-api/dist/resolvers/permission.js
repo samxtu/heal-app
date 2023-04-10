@@ -21,34 +21,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.RoleResolver = void 0;
+exports.PermissionResolver = void 0;
 const isAuth_1 = require("../middleware/isAuth");
 const type_graphql_1 = require("type-graphql");
-const Role_1 = require("../entities/Role");
-const user_1 = require("./user");
 const Permission_1 = require("../entities/Permission");
-const typeorm_1 = require("typeorm");
-let RoleArgs = class RoleArgs {
-};
-__decorate([
-    (0, type_graphql_1.Field)(),
-    __metadata("design:type", String)
-], RoleArgs.prototype, "name", void 0);
-__decorate([
-    (0, type_graphql_1.Field)(() => [Number]),
-    __metadata("design:type", Array)
-], RoleArgs.prototype, "permissions", void 0);
-RoleArgs = __decorate([
-    (0, type_graphql_1.InputType)()
-], RoleArgs);
-let RoleResolver = class RoleResolver {
-    addRole(inputArgs) {
+const user_1 = require("./user");
+let PermissionResolver = class PermissionResolver {
+    addPermission(name) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const perms = yield Permission_1.Permission.find({
-                    where: { id: (0, typeorm_1.In)(inputArgs.permissions) },
-                });
-                yield Role_1.Role.create({ name: inputArgs.name, permissions: perms }).save();
+                yield Permission_1.Permission.create({ name }).save();
             }
             catch (err) {
                 console.error(err.message);
@@ -60,26 +42,22 @@ let RoleResolver = class RoleResolver {
             return { status: true };
         });
     }
-    editRole(id, editArgs) {
+    editPermission(id, name) {
         return __awaiter(this, void 0, void 0, function* () {
-            if (!editArgs.name || editArgs.name === "")
+            if (!name || name === "")
                 return {
                     status: false,
                     error: { target: "general", message: "name can not be empty!" },
                 };
-            const role = yield Role_1.Role.findOne(id);
-            if (!role)
+            const permission = yield Permission_1.Permission.findOne(id);
+            if (!permission)
                 return {
                     status: false,
-                    error: { target: "general", message: "role does not exist!" },
+                    error: { target: "general", message: "permission does not exist!" },
                 };
             try {
-                const perms = yield Permission_1.Permission.find({
-                    where: { id: (0, typeorm_1.In)(editArgs.permissions) },
-                });
-                role.name = editArgs.name;
-                role.permissions = perms;
-                yield role.save();
+                permission.name = name;
+                yield permission.save();
             }
             catch (err) {
                 console.error(err.message);
@@ -91,10 +69,10 @@ let RoleResolver = class RoleResolver {
             return { status: true };
         });
     }
-    deleteRole(id) {
+    deletePermission(id) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                yield Role_1.Role.delete(id);
+                yield Permission_1.Permission.delete(id);
             }
             catch (err) {
                 console.error(err.message);
@@ -106,27 +84,27 @@ let RoleResolver = class RoleResolver {
             return { status: true };
         });
     }
-    getRoles() {
-        return Role_1.Role.find({ relations: ["users", "permissions"] });
+    getPermissions() {
+        return Permission_1.Permission.find({ relations: ["users", "roles"] });
     }
 };
 __decorate([
     (0, type_graphql_1.Mutation)(() => user_1.BooleanResponse),
     (0, type_graphql_1.UseMiddleware)(isAuth_1.isAuth),
-    __param(0, (0, type_graphql_1.Arg)("args")),
+    __param(0, (0, type_graphql_1.Arg)("name", () => String)),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [RoleArgs]),
+    __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
-], RoleResolver.prototype, "addRole", null);
+], PermissionResolver.prototype, "addPermission", null);
 __decorate([
     (0, type_graphql_1.Mutation)(() => user_1.BooleanResponse),
     (0, type_graphql_1.UseMiddleware)(isAuth_1.isAuth),
     __param(0, (0, type_graphql_1.Arg)("id")),
-    __param(1, (0, type_graphql_1.Arg)("args")),
+    __param(1, (0, type_graphql_1.Arg)("name", () => String)),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, RoleArgs]),
+    __metadata("design:paramtypes", [Number, String]),
     __metadata("design:returntype", Promise)
-], RoleResolver.prototype, "editRole", null);
+], PermissionResolver.prototype, "editPermission", null);
 __decorate([
     (0, type_graphql_1.Mutation)(() => user_1.BooleanResponse),
     (0, type_graphql_1.UseMiddleware)(isAuth_1.isAuth),
@@ -134,15 +112,15 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", Promise)
-], RoleResolver.prototype, "deleteRole", null);
+], PermissionResolver.prototype, "deletePermission", null);
 __decorate([
-    (0, type_graphql_1.Query)(() => [Role_1.Role]),
+    (0, type_graphql_1.Query)(() => [Permission_1.Permission]),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
-], RoleResolver.prototype, "getRoles", null);
-RoleResolver = __decorate([
-    (0, type_graphql_1.Resolver)(Role_1.Role)
-], RoleResolver);
-exports.RoleResolver = RoleResolver;
-//# sourceMappingURL=role.js.map
+], PermissionResolver.prototype, "getPermissions", null);
+PermissionResolver = __decorate([
+    (0, type_graphql_1.Resolver)(Permission_1.Permission)
+], PermissionResolver);
+exports.PermissionResolver = PermissionResolver;
+//# sourceMappingURL=permission.js.map

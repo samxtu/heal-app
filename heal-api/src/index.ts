@@ -20,6 +20,7 @@ import cors from "cors";
 import path from "path";
 import { RoleResolver } from "./resolvers/role";
 import { UserResolver } from "./resolvers/user";
+import { PermissionResolver } from "./resolvers/permission";
 
 const main = async () => {
   const conn = await createConnection({
@@ -68,7 +69,7 @@ const main = async () => {
   );
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [UserResolver, RoleResolver],
+      resolvers: [UserResolver, RoleResolver, PermissionResolver],
       validate: false,
     }),
     context: ({ req, res }) => ({ req, res, redis, conn }),

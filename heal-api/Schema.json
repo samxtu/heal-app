@@ -1,0 +1,19 @@
+{
+    "TYPE": {
+        "NAME": "ACCOUNT STATUS",
+        "CATEGORIES": [
+            "DISABLED",
+            "ACTIVE",
+            "LOCKED",
+            "DELETED",
+            "EXPIRED",
+            "EXPIRING",
+            "ONLEAVE",
+            "SUSPENDED",
+            "MATERNITY",
+            "PATERNITY",
+            "SABBATICAL",
+            "TERMINATED"
+        ]
+    }
+}

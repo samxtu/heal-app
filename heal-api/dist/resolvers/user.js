@@ -34,6 +34,7 @@ const uuid_1 = require("uuid");
 const isAuth_1 = require("../middleware/isAuth");
 const typeorm_1 = require("typeorm");
 const isAllowed_1 = require("../middleware/isAllowed");
+const Permission_1 = require("../entities/Permission");
 let FieldError = class FieldError {
 };
 __decorate([
@@ -130,14 +131,6 @@ __decorate([
     (0, type_graphql_1.Field)(),
     __metadata("design:type", String)
 ], EditUserArgs.prototype, "phone", void 0);
-__decorate([
-    (0, type_graphql_1.Field)(),
-    __metadata("design:type", String)
-], EditUserArgs.prototype, "location", void 0);
-__decorate([
-    (0, type_graphql_1.Field)(),
-    __metadata("design:type", Boolean)
-], EditUserArgs.prototype, "status", void 0);
 EditUserArgs = __decorate([
     (0, type_graphql_1.InputType)()
 ], EditUserArgs);
@@ -222,8 +215,6 @@ let UserResolver = class UserResolver {
                     lastname: params.lastname,
                     email: params.email.toLowerCase(),
                     phone: params.phone,
-                    location: params.location,
-                    status: true,
                     password: hashedPassword,
                 }).save();
                 console.log("user: ", user);
@@ -273,6 +264,32 @@ let UserResolver = class UserResolver {
             return { status: true };
         });
     }
+    manageUserPermissions(id, perms) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const user = yield User_1.User.findOne(id);
+            if (!user)
+                return {
+                    status: false,
+                    error: { target: "general", message: "User does not exist!" },
+                };
+            try {
+                const newPerms = yield Permission_1.Permission.find({ where: { id: (0, typeorm_1.In)(perms) } });
+                user.permissions = newPerms;
+                yield user.save();
+            }
+            catch (err) {
+                console.error("error message: ", err.message);
+                return {
+                    status: false,
+                    error: {
+                        target: "general",
+                        message: "Something went wrong, try again!",
+                    },
+                };
+            }
+            return { status: true };
+        });
+    }
     login(params, { req }) {
         return __awaiter(this, void 0, void 0, function* () {
             console.log(req.session.userId);
@@ -296,7 +313,7 @@ let UserResolver = class UserResolver {
                     },
                 };
             }
-            if (similarUser.status === false) {
+            if (similarUser.deleted === true) {
                 return {
                     error: {
                         target: "general",
@@ -389,6 +406,14 @@ __decorate([
     __metadata("design:paramtypes", [Number, EditUserArgs]),
     __metadata("design:returntype", Promise)
 ], UserResolver.prototype, "editUser", null);
+__decorate([
+    (0, type_graphql_1.Mutation)(() => BooleanResponse),
+    __param(0, (0, type_graphql_1.Arg)("id")),
+    __param(1, (0, type_graphql_1.Arg)("permissions", () => [Number])),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, Array]),
+    __metadata("design:returntype", Promise)
+], UserResolver.prototype, "manageUserPermissions", null);
 __decorate([
     (0, type_graphql_1.Mutation)(() => UserResponse),
     __param(0, (0, type_graphql_1.Arg)("params")),
