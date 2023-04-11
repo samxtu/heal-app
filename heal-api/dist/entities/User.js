@@ -14,7 +14,6 @@ const type_graphql_1 = require("type-graphql");
 const typeorm_1 = require("typeorm");
 const Role_1 = require("./Role");
 const AuditBaseEntity_1 = require("./AuditBaseEntity");
-const Category_1 = require("./Category");
 const Address_1 = require("./Address");
 const Permission_1 = require("./Permission");
 let User = class User extends AuditBaseEntity_1.AuditBaseEntity {
@@ -64,15 +63,15 @@ __decorate([
     __metadata("design:type", String)
 ], User.prototype, "password", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(() => [Category_1.Category]),
-    (0, typeorm_1.ManyToMany)(() => Category_1.Category, category => category.user),
-    __metadata("design:type", Array)
-], User.prototype, "status", void 0);
-__decorate([
     (0, type_graphql_1.Field)(() => [Permission_1.Permission]),
     (0, typeorm_1.ManyToMany)(() => Permission_1.Permission, permission => permission.users),
     __metadata("design:type", Array)
 ], User.prototype, "permissions", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(),
+    (0, typeorm_1.Column)({ default: false }),
+    __metadata("design:type", Boolean)
+], User.prototype, "deleted", void 0);
 User = __decorate([
     (0, type_graphql_1.ObjectType)(),
     (0, typeorm_1.Entity)()

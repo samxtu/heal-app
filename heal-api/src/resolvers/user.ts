@@ -43,7 +43,7 @@ class EmailPasswordArgs {
 @ObjectType()
 export class BooleanResponse {
   @Field()
-  status: boolean;
+  deleted: boolean;
   @Field(() => FieldError, { nullable: true })
   error?: FieldError;
 }
@@ -61,9 +61,11 @@ class RegisterUserArgs {
   @Field()
   phone: string;
   @Field()
-  location: string;
+  currentAddress: string;
   @Field()
   password: string;
+  @Field()
+  deleted: boolean;
 }
 
 @InputType()
@@ -81,7 +83,7 @@ class EditUserArgs {
   @Field()
   location: string;
   @Field()
-  status: boolean;
+  deleted: boolean;
 }
 
 @ObjectType()
@@ -119,12 +121,12 @@ export class UserResolver {
       } catch (err) {
         console.error(err.message);
         return {
-          status: false,
+          deleted: false,
           error: { target: "general", message: err.message },
         };
       }
     }
-    return { status: true };
+    return { deleted: false };
   }
 
   @Mutation(() => UserResponse)
@@ -178,15 +180,15 @@ export class UserResolver {
         lastname: params.lastname,
         email: params.email.toLowerCase(),
         phone: params.phone,
-        location: params.location,
-        status: true,
+        currentAddress: params.currentAddress,
+        deleted: false,
         password: hashedPassword,
       }).save();
       console.log("user: ", user);
     } catch (err) {
       if (err.code === "23505")
         return {
-          status: false,
+          deleted: false,
           error: {
             target: "username",
             message: "username already taken!",
@@ -194,14 +196,14 @@ export class UserResolver {
         };
       console.error("error message: ", err.message);
       return {
-        status: false,
+        deleted: false,
         error: {
           target: "general",
           message: "Something went wrong, try again!",
         },
       };
     }
-    return { status: true };
+    return { deleted: true };
   }
 
   @Mutation(() => BooleanResponse)
@@ -212,7 +214,7 @@ export class UserResolver {
     const user = await User.findOne(id);
     if (!user)
       return {
-        status: false,
+        deleted: false,
         error: { target: "general", message: "User does not exist!" },
       };
 
@@ -221,14 +223,14 @@ export class UserResolver {
     } catch (err) {
       console.error("error message: ", err.message);
       return {
-        status: false,
+        deleted: false,
         error: {
           target: "general",
           message: "Something went wrong, try again!",
         },
       };
     }
-    return { status: true };
+    return { deleted: true };
   }
 
   @Mutation(() => UserResponse)
@@ -257,7 +259,7 @@ export class UserResolver {
         },
       };
     }
-    if(similarUser.status === false) {
+    if(similarUser.deleted === false) {
       return {
         error: {
           target: "general",

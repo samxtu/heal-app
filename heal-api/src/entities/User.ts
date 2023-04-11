@@ -56,4 +56,8 @@ export class User extends AuditBaseEntity {
   @Field(()=>[Permission])
   @ManyToMany(()=>Permission, permission=>permission.users)
   permissions:Permission[]
+
+  @Field()
+  @Column({ default: false})
+  deleted: boolean;
 }

@@ -66,7 +66,7 @@ let BooleanResponse = class BooleanResponse {
 __decorate([
     (0, type_graphql_1.Field)(),
     __metadata("design:type", Boolean)
-], BooleanResponse.prototype, "status", void 0);
+], BooleanResponse.prototype, "deleted", void 0);
 __decorate([
     (0, type_graphql_1.Field)(() => FieldError, { nullable: true }),
     __metadata("design:type", FieldError)
@@ -100,11 +100,15 @@ __decorate([
 __decorate([
     (0, type_graphql_1.Field)(),
     __metadata("design:type", String)
-], RegisterUserArgs.prototype, "location", void 0);
+], RegisterUserArgs.prototype, "currentAddress", void 0);
 __decorate([
     (0, type_graphql_1.Field)(),
     __metadata("design:type", String)
 ], RegisterUserArgs.prototype, "password", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(),
+    __metadata("design:type", Boolean)
+], RegisterUserArgs.prototype, "deleted", void 0);
 RegisterUserArgs = __decorate([
     (0, type_graphql_1.InputType)()
 ], RegisterUserArgs);
@@ -137,7 +141,7 @@ __decorate([
 __decorate([
     (0, type_graphql_1.Field)(),
     __metadata("design:type", Boolean)
-], EditUserArgs.prototype, "status", void 0);
+], EditUserArgs.prototype, "deleted", void 0);
 EditUserArgs = __decorate([
     (0, type_graphql_1.InputType)()
 ], EditUserArgs);
@@ -168,12 +172,12 @@ let UserResolver = class UserResolver {
                 catch (err) {
                     console.error(err.message);
                     return {
-                        status: false,
+                        deleted: false,
                         error: { target: "general", message: err.message },
                     };
                 }
             }
-            return { status: true };
+            return { deleted: false };
         });
     }
     resetPassword(newPassword, token, { req, redis }) {
@@ -222,8 +226,8 @@ let UserResolver = class UserResolver {
                     lastname: params.lastname,
                     email: params.email.toLowerCase(),
                     phone: params.phone,
-                    location: params.location,
-                    status: true,
+                    currentAddress: params.currentAddress,
+                    deleted: false,
                     password: hashedPassword,
                 }).save();
                 console.log("user: ", user);
@@ -231,7 +235,7 @@ let UserResolver = class UserResolver {
             catch (err) {
                 if (err.code === "23505")
                     return {
-                        status: false,
+                        deleted: false,
                         error: {
                             target: "username",
                             message: "username already taken!",
@@ -239,14 +243,14 @@ let UserResolver = class UserResolver {
                     };
                 console.error("error message: ", err.message);
                 return {
-                    status: false,
+                    deleted: false,
                     error: {
                         target: "general",
                         message: "Something went wrong, try again!",
                     },
                 };
             }
-            return { status: true };
+            return { deleted: true };
         });
     }
     editUser(id, params) {
@@ -254,7 +258,7 @@ let UserResolver = class UserResolver {
             const user = yield User_1.User.findOne(id);
             if (!user)
                 return {
-                    status: false,
+                    deleted: false,
                     error: { target: "general", message: "User does not exist!" },
                 };
             try {
@@ -263,14 +267,14 @@ let UserResolver = class UserResolver {
             catch (err) {
                 console.error("error message: ", err.message);
                 return {
-                    status: false,
+                    deleted: false,
                     error: {
                         target: "general",
                         message: "Something went wrong, try again!",
                     },
                 };
             }
-            return { status: true };
+            return { deleted: true };
         });
     }
     login(params, { req }) {
@@ -296,7 +300,7 @@ let UserResolver = class UserResolver {
                     },
                 };
             }
-            if (similarUser.status === false) {
+            if (similarUser.deleted === false) {
                 return {
                     error: {
                         target: "general",
