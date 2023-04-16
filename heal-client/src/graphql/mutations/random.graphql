@@ -1,0 +1,75 @@
+# Types mutations
+mutation deleteType($id: Float!) {
+  deleteType(id: $id) {
+    ...BooleanResponse
+  }
+}
+
+mutation addType($args: TypeArgs!) {
+  addType(args: $args) {
+    ...BooleanResponse
+  }
+}
+
+mutation editType($id: Float!, $args: TypeEditArgs!) {
+  editType(id: $id, args: $args) {
+    ...BooleanResponse
+  }
+}
+
+# Permission mutations
+mutation addPermission($name: String!) {
+  addPermission(name: $name) {
+    ...BooleanResponse
+  }
+}
+
+mutation editPermission($id: Float!, $name: String!) {
+  editPermission(id: $id, name: $name) {
+    ...BooleanResponse
+  }
+}
+
+mutation deletePermission($id: Float!) {
+  deletePermission(id: $id) {
+    ...BooleanResponse
+  }
+}
+
+# Roles mutations
+mutation addRole($args: RoleArgs!) {
+  addRole(args: $args) {
+    ...BooleanResponse
+  }
+}
+
+mutation editRole($id: Float!, $args: RoleArgs!) {
+  editRole(id: $id, args: $args) {
+    ...BooleanResponse
+  }
+}
+
+mutation deleteRole($id: Float!) {
+  deleteRole(id: $id) {
+    ...BooleanResponse
+  }
+}
+
+# Category mutations
+mutation addCategory($args: CategoryArgs!) {
+  addCategory(args: $args) {
+    ...BooleanResponse
+  }
+}
+
+mutation editCategory($id: Float!, $args: CategoryArgs!) {
+  editCategory(id: $id, args: $args) {
+    ...BooleanResponse
+  }
+}
+
+mutation deleteCategory($id: Float!) {
+  deleteCategory(id: $id) {
+    ...BooleanResponse
+  }
+}

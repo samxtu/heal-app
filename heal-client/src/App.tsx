@@ -1,15 +1,16 @@
 import * as React from "react";
-import { ChakraProvider, Box, Grid, theme } from "@chakra-ui/react";
-import { BrowserRouter as Router, Switch } from "react-router-dom";
+import { ChakraProvider, Box, Grid } from "@chakra-ui/react";
+import { Redirect, BrowserRouter as Router, Switch } from "react-router-dom";
 import { ColorModeSwitcher } from "./ColorModeSwitcher";
 import { Provider } from "urql";
 import client from "./utils/CreateUrqlClient";
-import home from "./pages/home";
+import AuthRoute from "./utils/AuthRoute";
+import UnAuthRoute from "./utils/UnAuthRoute";
+import theme from "./theme/theme";
+import AdminLayout from "./layouts/Admin";
 import Login from "./pages/login";
 import Forgot_password from "./pages/forgot-password";
 import Reset_password from "./pages/reset-password";
-import AuthRoute from "./utils/AuthRoute";
-import UnAuthRoute from "./utils/UnAuthRoute";
 
 export const App = () => (
   <Provider value={client}>
@@ -19,10 +20,18 @@ export const App = () => (
           <ColorModeSwitcher justifySelf="flex-end" />
           <Router>
             <Switch>
-              <AuthRoute exact path="/" component={home} />
-              {/* <AuthRoute exact path="/roles" component={Roles} />
-              <AuthRoute exact path="/users" component={Users} /> */}
-              <UnAuthRoute exact path="/login" component={Login} user="user"/>
+              {/* protected routes  */}
+              <AuthRoute
+                exact
+                path="/admin/dashboard"
+                component={AdminLayout}
+              />
+              <AuthRoute exact path="/admin/tables" component={AdminLayout} />
+              <AuthRoute exact path="/admin/billing" component={AdminLayout} />
+              <AuthRoute exact path="/admin/profile" component={AdminLayout} />
+
+              {/* Unprotected routes */}
+              <UnAuthRoute exact path="/login" component={Login} user="user" />
               <UnAuthRoute
                 exact
                 path="/forgot-password"
@@ -33,6 +42,7 @@ export const App = () => (
                 path="/reset-password"
                 component={Reset_password}
               />
+              <Redirect from={`/`} to="/admin/dashboard" />
             </Switch>
           </Router>
         </Grid>

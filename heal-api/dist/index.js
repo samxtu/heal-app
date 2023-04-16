@@ -26,6 +26,8 @@ const path_1 = __importDefault(require("path"));
 const role_1 = require("./resolvers/role");
 const user_1 = require("./resolvers/user");
 const permission_1 = require("./resolvers/permission");
+const category_1 = require("./resolvers/category");
+const type_1 = require("./resolvers/type");
 const main = () => __awaiter(void 0, void 0, void 0, function* () {
     const conn = yield (0, typeorm_1.createConnection)({
         type: constants_1.DB_TYPE,
@@ -66,8 +68,14 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
     }));
     const apolloServer = new apollo_server_express_1.ApolloServer({
         schema: yield (0, type_graphql_1.buildSchema)({
-            resolvers: [user_1.UserResolver, role_1.RoleResolver, permission_1.PermissionResolver],
-            validate: false,
+            resolvers: [
+                user_1.UserResolver,
+                role_1.RoleResolver,
+                permission_1.PermissionResolver,
+                category_1.CategoryResolver,
+                type_1.TypeResolver,
+            ],
+            validate: true,
         }),
         context: ({ req, res }) => ({ req, res, redis, conn }),
     });

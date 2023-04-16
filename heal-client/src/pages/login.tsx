@@ -15,9 +15,11 @@ import {
 } from "@chakra-ui/react";
 import { FaUserCircle } from "react-icons/fa";
 
-interface IAppProps {}
+interface IAppProps {
+  query: any;
+}
 
-const Login: React.FunctionComponent<IAppProps> = (props) => {
+const Login: React.FunctionComponent<IAppProps> = ({ query }) => {
   const [, login] = useLoginMutation();
   const [general, setGeneral] = React.useState("");
   const history = useHistory();
@@ -45,6 +47,10 @@ const Login: React.FunctionComponent<IAppProps> = (props) => {
             console.log("values", values);
             const user = await login({ params: values });
             if (user.data?.login.error) {
+              console.log(
+                "cant login there is an error: ",
+                user.data.login.error.message
+              );
               setGeneral(user.data.login.error.message);
               // let newSchema = Yup.object().cast({
               //   [user.data.login.error.target]: user.data.login.error.message,
@@ -55,8 +61,11 @@ const Login: React.FunctionComponent<IAppProps> = (props) => {
               // }
             } else if (user.data?.login.user) {
               // worked
-              history.push({
+              history.replace({
                 pathname: "/",
+                // query.includes("next=")
+                //   ? query.split("next=")[1]
+                //   :
               });
             }
           }}

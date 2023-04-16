@@ -101,10 +101,6 @@ __decorate([
 __decorate([
     (0, type_graphql_1.Field)(),
     __metadata("design:type", String)
-], RegisterUserArgs.prototype, "location", void 0);
-__decorate([
-    (0, type_graphql_1.Field)(),
-    __metadata("design:type", String)
 ], RegisterUserArgs.prototype, "password", void 0);
 RegisterUserArgs = __decorate([
     (0, type_graphql_1.InputType)()
@@ -439,7 +435,7 @@ __decorate([
 __decorate([
     (0, type_graphql_1.Query)(() => [User_1.User]),
     (0, type_graphql_1.UseMiddleware)(isAuth_1.isAuth),
-    (0, type_graphql_1.UseMiddleware)((0, isAllowed_1.isAllowed)(["admin2"])),
+    (0, type_graphql_1.UseMiddleware)((0, isAllowed_1.isAllowed)(["admin"])),
     __param(0, (0, type_graphql_1.Arg)("roles", () => [type_graphql_1.Float], { nullable: true })),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Array]),

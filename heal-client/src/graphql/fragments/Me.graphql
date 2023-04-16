@@ -5,8 +5,6 @@ fragment Me on User {
   lastname
   email
   phone
-  location
-  status
   role {
     id
     name

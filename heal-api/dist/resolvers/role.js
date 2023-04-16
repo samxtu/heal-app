@@ -107,7 +107,7 @@ let RoleResolver = class RoleResolver {
         });
     }
     getRoles() {
-        return Role_1.Role.find({ relations: ["users", "permissions"] });
+        return Role_1.Role.find({ relations: ["users"] });
     }
 };
 __decorate([

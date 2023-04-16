@@ -21,9 +21,10 @@ import path from "path";
 import { RoleResolver } from "./resolvers/role";
 import { UserResolver } from "./resolvers/user";
 import { PermissionResolver } from "./resolvers/permission";
+import { CategoryResolver } from "./resolvers/category";
+import { TypeResolver } from "./resolvers/type";
 
 const main = async () => {
-
   const conn = await createConnection({
     type: DB_TYPE,
     database: DB_NAME,
@@ -70,8 +71,14 @@ const main = async () => {
   );
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [UserResolver, RoleResolver, PermissionResolver],
-      validate: false,
+      resolvers: [
+        UserResolver,
+        RoleResolver,
+        PermissionResolver,
+        CategoryResolver,
+        TypeResolver,
+      ],
+      validate: true,
     }),
     context: ({ req, res }) => ({ req, res, redis, conn }),
   });
@@ -82,5 +89,3 @@ const main = async () => {
 };
 
 main();
-
-

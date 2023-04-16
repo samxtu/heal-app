@@ -1,0 +1,53 @@
+# permission queries
+query getPermissions {
+  getPermissions {
+    id
+    name
+  }
+}
+
+# types queries
+query getTypes {
+  getTypes {
+    id
+    name
+    category {
+      id
+      name
+    }
+  }
+}
+
+query getType($id: Float!) {
+  getType(id: $id) {
+    id
+    name
+    category {
+      id
+      name
+    }
+  }
+}
+
+# roles queries
+query getRoles {
+  getRoles {
+    id
+    name
+  }
+}
+
+# categories queries
+query getAllCategories {
+  getAllCategories {
+    id
+    name
+  }
+}
+
+query getCategories($type: Float!) {
+  getCategories(type: $type) {
+    id
+    name
+  }
+}

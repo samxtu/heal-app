@@ -15,25 +15,101 @@ export type Scalars = {
   Float: number;
 };
 
+export type Address = {
+  __typename?: 'Address';
+  city: Scalars['String'];
+  companies: Array<Company>;
+  country: Scalars['String'];
+  createdAt: Scalars['String'];
+  currentUsers: Array<User>;
+  district: Scalars['String'];
+  id: Scalars['Float'];
+  permanentUsers: Array<User>;
+  street: Scalars['String'];
+  updatedAt: Scalars['String'];
+  ward: Scalars['String'];
+  zip: Scalars['String'];
+};
+
 export type BooleanResponse = {
   __typename?: 'BooleanResponse';
   error?: Maybe<FieldError>;
   status: Scalars['Boolean'];
 };
 
+export type Category = {
+  __typename?: 'Category';
+  createdAt: Scalars['String'];
+  id: Scalars['Float'];
+  name: Scalars['String'];
+  type: Type;
+  updatedAt: Scalars['String'];
+  user: Array<User>;
+};
+
+export type CategoryArgs = {
+  name: Scalars['String'];
+  type: Scalars['Float'];
+};
+
+export type Company = {
+  __typename?: 'Company';
+  branches: Array<Scalars['Float']>;
+  createdAt: Scalars['String'];
+  deleted: Scalars['Boolean'];
+  email: Scalars['String'];
+  employees: Array<Employee>;
+  id: Scalars['Float'];
+  isBranch: Scalars['Boolean'];
+  isParent: Scalars['Boolean'];
+  location: Address;
+  logo: Scalars['String'];
+  name: Scalars['String'];
+  parentId: Scalars['String'];
+  phone: Scalars['String'];
+  poBox: Scalars['String'];
+  registrationNumber: Scalars['String'];
+  status: Scalars['String'];
+  tinNumber: Scalars['String'];
+  updatedAt: Scalars['String'];
+  website: Scalars['String'];
+};
+
 export type EditUserArgs = {
   email: Scalars['String'];
   firstname: Scalars['String'];
   lastname: Scalars['String'];
-  location: Scalars['String'];
   middlename: Scalars['String'];
   phone: Scalars['String'];
-  status: Scalars['Boolean'];
 };
 
 export type EmailPasswordArgs = {
   email: Scalars['String'];
   password: Scalars['String'];
+};
+
+export type Employee = {
+  __typename?: 'Employee';
+  accountNumber: Scalars['String'];
+  checkNumber: Scalars['String'];
+  company: Company;
+  contractEndDate: Scalars['String'];
+  contractStartDate: Scalars['String'];
+  createdAt: Scalars['String'];
+  department: Scalars['String'];
+  departmentLocation: Scalars['String'];
+  designation: Scalars['String'];
+  educationLevel: Scalars['String'];
+  employeeId: Scalars['String'];
+  employmentType: Scalars['String'];
+  id: Scalars['Float'];
+  image: Scalars['String'];
+  nhifRank: Scalars['String'];
+  pfNumber: Scalars['String'];
+  role: Scalars['String'];
+  signature: Scalars['String'];
+  status: Scalars['String'];
+  updatedAt: Scalars['String'];
 };
 
 export type FieldError = {
@@ -44,20 +120,55 @@ export type FieldError = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  addCategory: BooleanResponse;
+  addPermission: BooleanResponse;
   addRole: BooleanResponse;
+  addType: BooleanResponse;
+  deleteCategory: BooleanResponse;
+  deletePermission: BooleanResponse;
   deleteRole: BooleanResponse;
+  deleteType: BooleanResponse;
+  editCategory: BooleanResponse;
+  editPermission: BooleanResponse;
   editRole: BooleanResponse;
+  editType: BooleanResponse;
   editUser: BooleanResponse;
   forgotPassword: BooleanResponse;
   login: UserResponse;
   logout: Scalars['Boolean'];
+  manageUserPermissions: BooleanResponse;
   register: BooleanResponse;
   resetPassword: UserResponse;
 };
 
 
-export type MutationAddRoleArgs = {
+export type MutationAddCategoryArgs = {
+  args: CategoryArgs;
+};
+
+
+export type MutationAddPermissionArgs = {
   name: Scalars['String'];
+};
+
+
+export type MutationAddRoleArgs = {
+  args: RoleArgs;
+};
+
+
+export type MutationAddTypeArgs = {
+  args: TypeArgs;
+};
+
+
+export type MutationDeleteCategoryArgs = {
+  id: Scalars['Float'];
+};
+
+
+export type MutationDeletePermissionArgs = {
+  id: Scalars['Float'];
 };
 
 
@@ -66,9 +177,32 @@ export type MutationDeleteRoleArgs = {
 };
 
 
-export type MutationEditRoleArgs = {
+export type MutationDeleteTypeArgs = {
+  id: Scalars['Float'];
+};
+
+
+export type MutationEditCategoryArgs = {
+  args: CategoryArgs;
+  id: Scalars['Float'];
+};
+
+
+export type MutationEditPermissionArgs = {
   id: Scalars['Float'];
   name: Scalars['String'];
+};
+
+
+export type MutationEditRoleArgs = {
+  args: RoleArgs;
+  id: Scalars['Float'];
+};
+
+
+export type MutationEditTypeArgs = {
+  args: TypeEditArgs;
+  id: Scalars['Float'];
 };
 
 
@@ -88,6 +222,12 @@ export type MutationLoginArgs = {
 };
 
 
+export type MutationManageUserPermissionsArgs = {
+  id: Scalars['Float'];
+  permissions: Array<Scalars['Float']>;
+};
+
+
 export type MutationRegisterArgs = {
   params: RegisterUserArgs;
 };
@@ -98,12 +238,37 @@ export type MutationResetPasswordArgs = {
   token: Scalars['String'];
 };
 
+export type Permission = {
+  __typename?: 'Permission';
+  createdAt: Scalars['String'];
+  id: Scalars['Float'];
+  name: Scalars['String'];
+  roles: Array<Role>;
+  updatedAt: Scalars['String'];
+  users: Array<User>;
+};
+
 export type Query = {
   __typename?: 'Query';
+  getAllCategories: Array<Category>;
+  getCategories: Array<Category>;
+  getPermissions: Array<Permission>;
   getRoles: Array<Role>;
+  getType?: Maybe<Type>;
+  getTypes: Array<Type>;
   getUser?: Maybe<User>;
   getUsers: Array<User>;
   me?: Maybe<User>;
+};
+
+
+export type QueryGetCategoriesArgs = {
+  type: Scalars['Float'];
+};
+
+
+export type QueryGetTypeArgs = {
+  id: Scalars['Float'];
 };
 
 
@@ -120,7 +285,6 @@ export type RegisterUserArgs = {
   email: Scalars['String'];
   firstname: Scalars['String'];
   lastname: Scalars['String'];
-  location: Scalars['String'];
   middlename: Scalars['String'];
   password: Scalars['String'];
   phone: Scalars['String'];
@@ -131,22 +295,54 @@ export type Role = {
   createdAt: Scalars['String'];
   id: Scalars['Float'];
   name: Scalars['String'];
+  permissions: Array<Permission>;
   updatedAt: Scalars['String'];
   users: Array<User>;
+};
+
+export type RoleArgs = {
+  name: Scalars['String'];
+  permissions: Array<Scalars['Float']>;
+};
+
+export type Type = {
+  __typename?: 'Type';
+  category: Array<Category>;
+  createdAt: Scalars['String'];
+  description: Scalars['String'];
+  id: Scalars['Float'];
+  name: Scalars['String'];
+  updatedAt: Scalars['String'];
+};
+
+export type TypeArgs = {
+  description: Scalars['String'];
+  name: Scalars['String'];
+};
+
+export type TypeEditArgs = {
+  categories: Array<Scalars['String']>;
+  description: Scalars['String'];
+  name: Scalars['String'];
 };
 
 export type User = {
   __typename?: 'User';
   createdAt: Scalars['String'];
+  currentAddress: Address;
+  dateOfBirth: Scalars['String'];
+  deleted: Scalars['Boolean'];
   email: Scalars['String'];
   firstname: Scalars['String'];
+  gender: Scalars['String'];
   id: Scalars['Float'];
   lastname: Scalars['String'];
-  location: Scalars['String'];
   middlename: Scalars['String'];
+  permanentAddress: Address;
+  permissions: Array<Permission>;
   phone: Scalars['String'];
   role: Role;
-  status: Scalars['Boolean'];
+  status: Array<Category>;
   updatedAt: Scalars['String'];
 };
 
@@ -158,20 +354,64 @@ export type UserResponse = {
 
 export type ErrorFragment = { __typename?: 'FieldError', target: string, message: string };
 
-export type MeFragment = { __typename?: 'User', id: number, firstname: string, middlename: string, lastname: string, email: string, phone: string, location: string, status: boolean, role: { __typename?: 'Role', id: number, name: string } };
+export type MeFragment = { __typename?: 'User', id: number, firstname: string, middlename: string, lastname: string, email: string, phone: string, role: { __typename?: 'Role', id: number, name: string } };
 
 export type BooleanResponseFragment = { __typename?: 'BooleanResponse', status: boolean, error?: { __typename?: 'FieldError', target: string, message: string } | null };
 
-export type AddRoleMutationVariables = Exact<{
+export type DeleteTypeMutationVariables = Exact<{
+  id: Scalars['Float'];
+}>;
+
+
+export type DeleteTypeMutation = { __typename?: 'Mutation', deleteType: { __typename?: 'BooleanResponse', status: boolean, error?: { __typename?: 'FieldError', target: string, message: string } | null } };
+
+export type AddTypeMutationVariables = Exact<{
+  args: TypeArgs;
+}>;
+
+
+export type AddTypeMutation = { __typename?: 'Mutation', addType: { __typename?: 'BooleanResponse', status: boolean, error?: { __typename?: 'FieldError', target: string, message: string } | null } };
+
+export type EditTypeMutationVariables = Exact<{
+  id: Scalars['Float'];
+  args: TypeEditArgs;
+}>;
+
+
+export type EditTypeMutation = { __typename?: 'Mutation', editType: { __typename?: 'BooleanResponse', status: boolean, error?: { __typename?: 'FieldError', target: string, message: string } | null } };
+
+export type AddPermissionMutationVariables = Exact<{
   name: Scalars['String'];
+}>;
+
+
+export type AddPermissionMutation = { __typename?: 'Mutation', addPermission: { __typename?: 'BooleanResponse', status: boolean, error?: { __typename?: 'FieldError', target: string, message: string } | null } };
+
+export type EditPermissionMutationVariables = Exact<{
+  id: Scalars['Float'];
+  name: Scalars['String'];
+}>;
+
+
+export type EditPermissionMutation = { __typename?: 'Mutation', editPermission: { __typename?: 'BooleanResponse', status: boolean, error?: { __typename?: 'FieldError', target: string, message: string } | null } };
+
+export type DeletePermissionMutationVariables = Exact<{
+  id: Scalars['Float'];
+}>;
+
+
+export type DeletePermissionMutation = { __typename?: 'Mutation', deletePermission: { __typename?: 'BooleanResponse', status: boolean, error?: { __typename?: 'FieldError', target: string, message: string } | null } };
+
+export type AddRoleMutationVariables = Exact<{
+  args: RoleArgs;
 }>;
 
 
 export type AddRoleMutation = { __typename?: 'Mutation', addRole: { __typename?: 'BooleanResponse', status: boolean, error?: { __typename?: 'FieldError', target: string, message: string } | null } };
 
 export type EditRoleMutationVariables = Exact<{
-  name: Scalars['String'];
   id: Scalars['Float'];
+  args: RoleArgs;
 }>;
 
 
@@ -183,6 +423,28 @@ export type DeleteRoleMutationVariables = Exact<{
 
 
 export type DeleteRoleMutation = { __typename?: 'Mutation', deleteRole: { __typename?: 'BooleanResponse', status: boolean, error?: { __typename?: 'FieldError', target: string, message: string } | null } };
+
+export type AddCategoryMutationVariables = Exact<{
+  args: CategoryArgs;
+}>;
+
+
+export type AddCategoryMutation = { __typename?: 'Mutation', addCategory: { __typename?: 'BooleanResponse', status: boolean, error?: { __typename?: 'FieldError', target: string, message: string } | null } };
+
+export type EditCategoryMutationVariables = Exact<{
+  id: Scalars['Float'];
+  args: CategoryArgs;
+}>;
+
+
+export type EditCategoryMutation = { __typename?: 'Mutation', editCategory: { __typename?: 'BooleanResponse', status: boolean, error?: { __typename?: 'FieldError', target: string, message: string } | null } };
+
+export type DeleteCategoryMutationVariables = Exact<{
+  id: Scalars['Float'];
+}>;
+
+
+export type DeleteCategoryMutation = { __typename?: 'Mutation', deleteCategory: { __typename?: 'BooleanResponse', status: boolean, error?: { __typename?: 'FieldError', target: string, message: string } | null } };
 
 export type ForgotPasswordMutationVariables = Exact<{
   email: Scalars['String'];
@@ -196,7 +458,7 @@ export type LoginMutationVariables = Exact<{
 }>;
 
 
-export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'UserResponse', user?: { __typename?: 'User', id: number, firstname: string, middlename: string, lastname: string, email: string, phone: string, location: string, status: boolean, role: { __typename?: 'Role', id: number, name: string } } | null, error?: { __typename?: 'FieldError', target: string, message: string } | null } };
+export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'UserResponse', user?: { __typename?: 'User', id: number, firstname: string, middlename: string, lastname: string, email: string, phone: string, role: { __typename?: 'Role', id: number, name: string } } | null, error?: { __typename?: 'FieldError', target: string, message: string } | null } };
 
 export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -209,7 +471,7 @@ export type ResetPasswordMutationVariables = Exact<{
 }>;
 
 
-export type ResetPasswordMutation = { __typename?: 'Mutation', resetPassword: { __typename?: 'UserResponse', user?: { __typename?: 'User', id: number, firstname: string, middlename: string, lastname: string, email: string, phone: string, location: string, status: boolean, role: { __typename?: 'Role', id: number, name: string } } | null, error?: { __typename?: 'FieldError', target: string, message: string } | null } };
+export type ResetPasswordMutation = { __typename?: 'Mutation', resetPassword: { __typename?: 'UserResponse', user?: { __typename?: 'User', id: number, firstname: string, middlename: string, lastname: string, email: string, phone: string, role: { __typename?: 'Role', id: number, name: string } } | null, error?: { __typename?: 'FieldError', target: string, message: string } | null } };
 
 export type RegisterMutationVariables = Exact<{
   params: RegisterUserArgs;
@@ -226,29 +488,58 @@ export type EditUserMutationVariables = Exact<{
 
 export type EditUserMutation = { __typename?: 'Mutation', editUser: { __typename?: 'BooleanResponse', status: boolean, error?: { __typename?: 'FieldError', target: string, message: string } | null } };
 
-export type GetRolesQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetRolesQuery = { __typename?: 'Query', getRoles: Array<{ __typename?: 'Role', id: number, name: string }> };
-
 export type GetUsersQueryVariables = Exact<{
   roles?: InputMaybe<Array<Scalars['Float']> | Scalars['Float']>;
 }>;
 
 
-export type GetUsersQuery = { __typename?: 'Query', getUsers: Array<{ __typename?: 'User', id: number, firstname: string, middlename: string, lastname: string, email: string, phone: string, location: string, status: boolean, role: { __typename?: 'Role', id: number, name: string } }> };
+export type GetUsersQuery = { __typename?: 'Query', getUsers: Array<{ __typename?: 'User', id: number, firstname: string, middlename: string, lastname: string, email: string, phone: string, role: { __typename?: 'Role', id: number, name: string } }> };
 
 export type GetUserQueryVariables = Exact<{
   id: Scalars['Float'];
 }>;
 
 
-export type GetUserQuery = { __typename?: 'Query', getUser?: { __typename?: 'User', id: number, firstname: string, middlename: string, lastname: string, email: string, phone: string, location: string, status: boolean, role: { __typename?: 'Role', id: number, name: string } } | null };
+export type GetUserQuery = { __typename?: 'Query', getUser?: { __typename?: 'User', id: number, firstname: string, middlename: string, lastname: string, email: string, phone: string, role: { __typename?: 'Role', id: number, name: string } } | null };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'User', id: number, firstname: string, middlename: string, lastname: string, email: string, phone: string, location: string, status: boolean, role: { __typename?: 'Role', id: number, name: string } } | null };
+export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'User', id: number, firstname: string, middlename: string, lastname: string, email: string, phone: string, role: { __typename?: 'Role', id: number, name: string } } | null };
+
+export type GetPermissionsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetPermissionsQuery = { __typename?: 'Query', getPermissions: Array<{ __typename?: 'Permission', id: number, name: string }> };
+
+export type GetTypesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetTypesQuery = { __typename?: 'Query', getTypes: Array<{ __typename?: 'Type', id: number, name: string, category: Array<{ __typename?: 'Category', id: number, name: string }> }> };
+
+export type GetTypeQueryVariables = Exact<{
+  id: Scalars['Float'];
+}>;
+
+
+export type GetTypeQuery = { __typename?: 'Query', getType?: { __typename?: 'Type', id: number, name: string, category: Array<{ __typename?: 'Category', id: number, name: string }> } | null };
+
+export type GetRolesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetRolesQuery = { __typename?: 'Query', getRoles: Array<{ __typename?: 'Role', id: number, name: string }> };
+
+export type GetAllCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetAllCategoriesQuery = { __typename?: 'Query', getAllCategories: Array<{ __typename?: 'Category', id: number, name: string }> };
+
+export type GetCategoriesQueryVariables = Exact<{
+  type: Scalars['Float'];
+}>;
+
+
+export type GetCategoriesQuery = { __typename?: 'Query', getCategories: Array<{ __typename?: 'Category', id: number, name: string }> };
 
 export const ErrorFragmentDoc = gql`
     fragment Error on FieldError {
@@ -264,8 +555,6 @@ export const MeFragmentDoc = gql`
   lastname
   email
   phone
-  location
-  status
   role {
     id
     name
@@ -281,9 +570,75 @@ export const BooleanResponseFragmentDoc = gql`
   }
 }
     `;
+export const DeleteTypeDocument = gql`
+    mutation deleteType($id: Float!) {
+  deleteType(id: $id) {
+    ...BooleanResponse
+  }
+}
+    ${BooleanResponseFragmentDoc}`;
+
+export function useDeleteTypeMutation() {
+  return Urql.useMutation<DeleteTypeMutation, DeleteTypeMutationVariables>(DeleteTypeDocument);
+};
+export const AddTypeDocument = gql`
+    mutation addType($args: TypeArgs!) {
+  addType(args: $args) {
+    ...BooleanResponse
+  }
+}
+    ${BooleanResponseFragmentDoc}`;
+
+export function useAddTypeMutation() {
+  return Urql.useMutation<AddTypeMutation, AddTypeMutationVariables>(AddTypeDocument);
+};
+export const EditTypeDocument = gql`
+    mutation editType($id: Float!, $args: TypeEditArgs!) {
+  editType(id: $id, args: $args) {
+    ...BooleanResponse
+  }
+}
+    ${BooleanResponseFragmentDoc}`;
+
+export function useEditTypeMutation() {
+  return Urql.useMutation<EditTypeMutation, EditTypeMutationVariables>(EditTypeDocument);
+};
+export const AddPermissionDocument = gql`
+    mutation addPermission($name: String!) {
+  addPermission(name: $name) {
+    ...BooleanResponse
+  }
+}
+    ${BooleanResponseFragmentDoc}`;
+
+export function useAddPermissionMutation() {
+  return Urql.useMutation<AddPermissionMutation, AddPermissionMutationVariables>(AddPermissionDocument);
+};
+export const EditPermissionDocument = gql`
+    mutation editPermission($id: Float!, $name: String!) {
+  editPermission(id: $id, name: $name) {
+    ...BooleanResponse
+  }
+}
+    ${BooleanResponseFragmentDoc}`;
+
+export function useEditPermissionMutation() {
+  return Urql.useMutation<EditPermissionMutation, EditPermissionMutationVariables>(EditPermissionDocument);
+};
+export const DeletePermissionDocument = gql`
+    mutation deletePermission($id: Float!) {
+  deletePermission(id: $id) {
+    ...BooleanResponse
+  }
+}
+    ${BooleanResponseFragmentDoc}`;
+
+export function useDeletePermissionMutation() {
+  return Urql.useMutation<DeletePermissionMutation, DeletePermissionMutationVariables>(DeletePermissionDocument);
+};
 export const AddRoleDocument = gql`
-    mutation addRole($name: String!) {
-  addRole(name: $name) {
+    mutation addRole($args: RoleArgs!) {
+  addRole(args: $args) {
     ...BooleanResponse
   }
 }
@@ -293,8 +648,8 @@ export function useAddRoleMutation() {
   return Urql.useMutation<AddRoleMutation, AddRoleMutationVariables>(AddRoleDocument);
 };
 export const EditRoleDocument = gql`
-    mutation editRole($name: String!, $id: Float!) {
-  editRole(name: $name, id: $id) {
+    mutation editRole($id: Float!, $args: RoleArgs!) {
+  editRole(id: $id, args: $args) {
     ...BooleanResponse
   }
 }
@@ -313,6 +668,39 @@ export const DeleteRoleDocument = gql`
 
 export function useDeleteRoleMutation() {
   return Urql.useMutation<DeleteRoleMutation, DeleteRoleMutationVariables>(DeleteRoleDocument);
+};
+export const AddCategoryDocument = gql`
+    mutation addCategory($args: CategoryArgs!) {
+  addCategory(args: $args) {
+    ...BooleanResponse
+  }
+}
+    ${BooleanResponseFragmentDoc}`;
+
+export function useAddCategoryMutation() {
+  return Urql.useMutation<AddCategoryMutation, AddCategoryMutationVariables>(AddCategoryDocument);
+};
+export const EditCategoryDocument = gql`
+    mutation editCategory($id: Float!, $args: CategoryArgs!) {
+  editCategory(id: $id, args: $args) {
+    ...BooleanResponse
+  }
+}
+    ${BooleanResponseFragmentDoc}`;
+
+export function useEditCategoryMutation() {
+  return Urql.useMutation<EditCategoryMutation, EditCategoryMutationVariables>(EditCategoryDocument);
+};
+export const DeleteCategoryDocument = gql`
+    mutation deleteCategory($id: Float!) {
+  deleteCategory(id: $id) {
+    ...BooleanResponse
+  }
+}
+    ${BooleanResponseFragmentDoc}`;
+
+export function useDeleteCategoryMutation() {
+  return Urql.useMutation<DeleteCategoryMutation, DeleteCategoryMutationVariables>(DeleteCategoryDocument);
 };
 export const ForgotPasswordDocument = gql`
     mutation forgotPassword($email: String!) {
@@ -397,18 +785,6 @@ export const EditUserDocument = gql`
 export function useEditUserMutation() {
   return Urql.useMutation<EditUserMutation, EditUserMutationVariables>(EditUserDocument);
 };
-export const GetRolesDocument = gql`
-    query getRoles {
-  getRoles {
-    id
-    name
-  }
-}
-    `;
-
-export function useGetRolesQuery(options?: Omit<Urql.UseQueryArgs<GetRolesQueryVariables>, 'query'>) {
-  return Urql.useQuery<GetRolesQuery, GetRolesQueryVariables>({ query: GetRolesDocument, ...options });
-};
 export const GetUsersDocument = gql`
     query getUsers($roles: [Float!]) {
   getUsers(roles: $roles) {
@@ -441,4 +817,84 @@ export const MeDocument = gql`
 
 export function useMeQuery(options?: Omit<Urql.UseQueryArgs<MeQueryVariables>, 'query'>) {
   return Urql.useQuery<MeQuery, MeQueryVariables>({ query: MeDocument, ...options });
+};
+export const GetPermissionsDocument = gql`
+    query getPermissions {
+  getPermissions {
+    id
+    name
+  }
+}
+    `;
+
+export function useGetPermissionsQuery(options?: Omit<Urql.UseQueryArgs<GetPermissionsQueryVariables>, 'query'>) {
+  return Urql.useQuery<GetPermissionsQuery, GetPermissionsQueryVariables>({ query: GetPermissionsDocument, ...options });
+};
+export const GetTypesDocument = gql`
+    query getTypes {
+  getTypes {
+    id
+    name
+    category {
+      id
+      name
+    }
+  }
+}
+    `;
+
+export function useGetTypesQuery(options?: Omit<Urql.UseQueryArgs<GetTypesQueryVariables>, 'query'>) {
+  return Urql.useQuery<GetTypesQuery, GetTypesQueryVariables>({ query: GetTypesDocument, ...options });
+};
+export const GetTypeDocument = gql`
+    query getType($id: Float!) {
+  getType(id: $id) {
+    id
+    name
+    category {
+      id
+      name
+    }
+  }
+}
+    `;
+
+export function useGetTypeQuery(options: Omit<Urql.UseQueryArgs<GetTypeQueryVariables>, 'query'>) {
+  return Urql.useQuery<GetTypeQuery, GetTypeQueryVariables>({ query: GetTypeDocument, ...options });
+};
+export const GetRolesDocument = gql`
+    query getRoles {
+  getRoles {
+    id
+    name
+  }
+}
+    `;
+
+export function useGetRolesQuery(options?: Omit<Urql.UseQueryArgs<GetRolesQueryVariables>, 'query'>) {
+  return Urql.useQuery<GetRolesQuery, GetRolesQueryVariables>({ query: GetRolesDocument, ...options });
+};
+export const GetAllCategoriesDocument = gql`
+    query getAllCategories {
+  getAllCategories {
+    id
+    name
+  }
+}
+    `;
+
+export function useGetAllCategoriesQuery(options?: Omit<Urql.UseQueryArgs<GetAllCategoriesQueryVariables>, 'query'>) {
+  return Urql.useQuery<GetAllCategoriesQuery, GetAllCategoriesQueryVariables>({ query: GetAllCategoriesDocument, ...options });
+};
+export const GetCategoriesDocument = gql`
+    query getCategories($type: Float!) {
+  getCategories(type: $type) {
+    id
+    name
+  }
+}
+    `;
+
+export function useGetCategoriesQuery(options: Omit<Urql.UseQueryArgs<GetCategoriesQueryVariables>, 'query'>) {
+  return Urql.useQuery<GetCategoriesQuery, GetCategoriesQueryVariables>({ query: GetCategoriesDocument, ...options });
 };

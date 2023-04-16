@@ -92,6 +92,6 @@ export class RoleResolver {
 
   @Query(() => [Role])
   getRoles(): Promise<Role[]> {
-    return Role.find({ relations: ["users", "permissions"] });
+    return Role.find({ relations: ["users"] });
   }
 }

@@ -62,8 +62,6 @@ class RegisterUserArgs {
   @Field()
   phone: string;
   @Field()
-  location: string;
-  @Field()
   password: string;
 }
 
@@ -324,7 +322,7 @@ export class UserResolver {
 
   @Query(() => [User])
   @UseMiddleware(isAuth)
-  @UseMiddleware(isAllowed(["admin2"]))
+  @UseMiddleware(isAllowed(["admin"]))
   async getUsers(
     @Arg("roles", () => [Float], { nullable: true }) roles: number[]
   ): Promise<User[]> {

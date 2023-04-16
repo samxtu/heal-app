@@ -5,12 +5,14 @@ import { Wrapper } from "../components/Wrapper";
 
 interface IUARProps {
   exact: boolean;
+  location?: any;
   path: string;
   component: React.FC;
 }
 
 const AuthRoute: React.FC<IUARProps> = ({
   component: Component,
+  location,
   ...rest
 }: any) => {
   const [{ data, fetching }] = useMeQuery();
@@ -26,7 +28,11 @@ const AuthRoute: React.FC<IUARProps> = ({
             <Component {...props} />
           </Wrapper>
         ) : (
-          <Redirect to="/login" />
+          <Redirect
+            to={`/login${
+              location.pathname === "/" ? "" : "?next=" + location.pathname
+            }`}
+          />
         )
       }
     />

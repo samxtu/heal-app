@@ -1,6 +1,0 @@
-query getRoles {
-  getRoles {
-    id
-    name
-  }
-}
