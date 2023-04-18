@@ -4,7 +4,7 @@ import { useMeQuery } from "../generated/graphql";
 import { Wrapper } from "../components/Wrapper";
 
 interface IUARProps {
-  exact: boolean;
+  exact?: boolean;
   location?: any;
   path: string;
   component: React.FC;

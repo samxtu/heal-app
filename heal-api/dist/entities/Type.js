@@ -18,7 +18,7 @@ let Type = class Type extends AuditEntity_1.AuditBaseEntity {
 };
 __decorate([
     (0, type_graphql_1.Field)(),
-    (0, typeorm_1.Column)({ type: "text" }),
+    (0, typeorm_1.Column)({ type: "text", unique: true }),
     __metadata("design:type", String)
 ], Type.prototype, "name", void 0);
 __decorate([

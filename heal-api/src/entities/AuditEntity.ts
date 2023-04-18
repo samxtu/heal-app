@@ -1,6 +1,7 @@
 import { Field, ObjectType } from "type-graphql";
 import {
   BaseEntity,
+  Column,
   CreateDateColumn,
   Entity,
   PrimaryGeneratedColumn,
@@ -21,4 +22,8 @@ export class AuditBaseEntity extends BaseEntity {
   @Field(() => String)
   @UpdateDateColumn({ type: "timestamp" })
   updatedAt = new Date();
+
+  @Field()
+  @Column({ default: false })
+  deleted: boolean;
 }

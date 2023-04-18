@@ -1,0 +1,29 @@
+{
+    "Dashboard": {
+        "Super Admin": "Loads Admin Dashboard To Manage Everything, All Users and All Companies (Hospitals, Pharmacy)",
+        "Company with Branches Employee HR": "Manages company and branches",
+        "Company Employee": "Hospital functionalities",
+        "Employee": "Someday will add a employee portal"
+    },
+    "Super Admin Modules": {
+        "Dashboard": {
+            
+        },
+        "Modules": {
+            "Settings": {
+                "roles": {
+                    "views": "Search, Add Button, Edit Button, Delete Button, Table of roles"
+                },
+                "permissions": {
+
+                },
+                "types": {
+
+                },
+                "categories": {
+
+                }
+            }
+        }
+    }
+}

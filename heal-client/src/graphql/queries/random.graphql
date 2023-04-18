@@ -11,6 +11,7 @@ query getTypes {
   getTypes {
     id
     name
+    description
     category {
       id
       name
@@ -22,6 +23,7 @@ query getType($id: Float!) {
   getType(id: $id) {
     id
     name
+    description
     category {
       id
       name

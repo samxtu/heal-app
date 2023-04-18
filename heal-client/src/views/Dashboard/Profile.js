@@ -652,7 +652,7 @@ function Profile() {
               minHeight={{ sm: "200px", md: "100%" }}
             >
               <Flex direction="column" justifyContent="center" align="center">
-                <Icon as={FaPlus} color={textColor} fontSize="lg" mb="12px" />
+                <Icon as={FaPlus} color={textColor} fontSize="lg" mr="12px" />
                 <Text fontSize="lg" color={textColor} fontWeight="bold">
                   Create a New Project
                 </Text>
