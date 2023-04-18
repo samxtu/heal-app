@@ -12,7 +12,7 @@ import {
 import React, { useEffect, useState } from "react";
 import AdminNavbarLinks from "./AdminNavbarLinks";
 
-export default function AdminNavbar(props: any) {
+export default function AdminNavbar(props) {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -23,16 +23,8 @@ export default function AdminNavbar(props: any) {
     };
   });
 
-  const {
-    // variant,
-    // children,
-    fixed,
-    // secondary,
-    moduleText,
-    brandText,
-    // onOpen,
-  } = props;
-  console.log("module text: ", moduleText);
+  const { variant, children, fixed, secondary, brandText, onOpen, ...rest } =
+    props;
 
   // Here are all the props that may change depending on navbar's type or state.(secondary, variant, scrolled)
   let mainText =
@@ -44,9 +36,9 @@ export default function AdminNavbar(props: any) {
       ? useColorModeValue("gray.700", "gray.200")
       : useColorModeValue("white", "gray.200");
   let navbarPosition = "absolute";
-  // let navbarFilter = "none";
-  // let navbarBackdrop = "none";
-  // let navbarShadow = "none";
+  let navbarFilter = "none";
+  let navbarBackdrop = "none";
+  let navbarShadow = "none";
   let navbarBg = "none";
   let navbarBorder = "transparent";
   let secondaryMargin = "0px";
@@ -54,22 +46,22 @@ export default function AdminNavbar(props: any) {
   if (props.fixed === true)
     if (scrolled === true) {
       navbarPosition = "fixed";
-      // navbarShadow = useColorModeValue(
-      //   "0px 7px 23px rgba(0, 0, 0, 0.05)",
-      //   "none"
-      // );
+      navbarShadow = useColorModeValue(
+        "0px 7px 23px rgba(0, 0, 0, 0.05)",
+        "none"
+      );
       navbarBg = useColorModeValue(
         "linear-gradient(112.83deg, rgba(255, 255, 255, 0.82) 0%, rgba(255, 255, 255, 0.8) 110.84%)",
         "linear-gradient(112.83deg, rgba(255, 255, 255, 0.21) 0%, rgba(255, 255, 255, 0) 110.84%)"
       );
       navbarBorder = useColorModeValue("#FFFFFF", "rgba(255, 255, 255, 0.31)");
-      // navbarFilter = useColorModeValue(
-      //   "none",
-      //   "drop-shadow(0px 7px 23px rgba(0, 0, 0, 0.05))"
-      // );
+      navbarFilter = useColorModeValue(
+        "none",
+        "drop-shadow(0px 7px 23px rgba(0, 0, 0, 0.05))"
+      );
     }
   if (props.secondary) {
-    // navbarBackdrop = "none";
+    navbarBackdrop = "none";
     navbarPosition = "absolute";
     mainText = "white";
     secondaryText = "white";
@@ -86,7 +78,7 @@ export default function AdminNavbar(props: any) {
 
   return (
     <Box
-      position={navbarPosition as any}
+      position={navbarPosition}
       // boxShadow={navbarShadow}
       bg={navbarBg}
       borderColor={navbarBorder}
@@ -132,7 +124,7 @@ export default function AdminNavbar(props: any) {
           <Breadcrumb>
             <BreadcrumbItem color={mainText}>
               <BreadcrumbLink href="#" color={secondaryText}>
-                {moduleText ? moduleText : "Module"}
+                Modules
               </BreadcrumbLink>
             </BreadcrumbItem>
 

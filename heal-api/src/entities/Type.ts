@@ -7,7 +7,7 @@ import { Category } from "./Category";
 @Entity()
 export class Type extends AuditBaseEntity {
   @Field()
-  @Column({ type: "text", unique: true })
+  @Column({ type: "text" })
   name!: string;
 
   @Field()

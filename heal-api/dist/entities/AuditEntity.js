@@ -34,11 +34,6 @@ __decorate([
     (0, typeorm_1.UpdateDateColumn)({ type: "timestamp" }),
     __metadata("design:type", Object)
 ], AuditBaseEntity.prototype, "updatedAt", void 0);
-__decorate([
-    (0, type_graphql_1.Field)(),
-    (0, typeorm_1.Column)({ default: false }),
-    __metadata("design:type", Boolean)
-], AuditBaseEntity.prototype, "deleted", void 0);
 AuditBaseEntity = __decorate([
     (0, type_graphql_1.ObjectType)(),
     (0, typeorm_1.Entity)()

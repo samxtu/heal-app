@@ -7,7 +7,6 @@ import {
   Query,
   InputType,
   Field,
-  ObjectType,
 } from "type-graphql";
 import { Type } from "../entities/Type";
 import { BooleanResponse } from "./user";
@@ -32,32 +31,24 @@ class TypeEditArgs {
   categories: [number];
 }
 
-@ObjectType()
-export class BooleanResponseWithType extends BooleanResponse {
-  @Field(() => Type, { nullable: true })
-  data?: Type;
-}
-
 @Resolver(Type)
 export class TypeResolver {
-  @Mutation(() => BooleanResponseWithType)
+  @Mutation(() => BooleanResponse)
   @UseMiddleware(isAuth)
-  addType(@Arg("args") inputArgs: TypeArgs): Promise<BooleanResponseWithType> {
-    return Type.create({
-      name: inputArgs.name,
-      description: inputArgs.description,
-    })
-      .save()
-      .then((type) => {
-        return { status: true, type: type };
-      })
-      .catch((error) => {
-        console.error("we caught the error: ", error.message);
-        return {
-          status: false,
-          error: { target: "general", message: error.message },
-        };
-      });
+  async addType(@Arg("args") inputArgs: TypeArgs): Promise<BooleanResponse> {
+    try {
+      await Type.create({
+        name: inputArgs.name,
+        description: inputArgs.description,
+      }).save();
+    } catch (err) {
+      console.error(err.message);
+      return {
+        status: false,
+        error: { target: "general", message: err.message },
+      };
+    }
+    return { status: true };
   }
 
   @Mutation(() => BooleanResponse)
@@ -132,11 +123,11 @@ export class TypeResolver {
 
   @Query(() => [Type])
   getTypes(): Promise<Type[]> {
-    return Type.find({ relations: ["category"] });
+    return Type.find({ relations: ["users"] });
   }
 
   @Query(() => Type, { nullable: true })
   async getType(@Arg("id") id: number): Promise<Type | undefined> {
-    return Type.findOne(id, { relations: ["category"] });
+    return Type.findOne(id, { relations: ["users"] });
   }
 }

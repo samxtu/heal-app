@@ -7,16 +7,16 @@ import {
   useColorMode,
 } from "@chakra-ui/react";
 import Configurator from "../components/Configurator/Configurator";
-import Footer from "../components/Footer/Footer";
+import Footer from "../components/Footer/Footer.js";
 import { ArgonLogoDark, ArgonLogoLight } from "../components/Icons/Icons";
 // Layout components
-import AdminNavbar from "../components/Navbars/AdminNavbar";
-import Sidebar from "../components/Sidebar/Sidebar";
+import AdminNavbar from "../components/Navbars/AdminNavbar.js";
+import Sidebar from "../components/Sidebar/Sidebar.js";
 import React, { useState } from "react";
-import { Redirect, Switch } from "react-router-dom";
+import { Redirect, Route, Switch } from "react-router-dom";
 import routes from "../routes";
 // Custom Chakra theme
-// import FixedPlugin from "../components/FixedPlugin/FixedPlugin";
+import FixedPlugin from "../components/FixedPlugin/FixedPlugin";
 // Custom components
 import MainPanel from "../components/Layout/MainPanel";
 import PanelContainer from "../components/Layout/PanelContainer";
@@ -24,7 +24,7 @@ import PanelContent from "../components/Layout/PanelContent";
 import bgAdmin from "../assets/img/admin-background.png";
 import AuthRoute from "../utils/AuthRoute";
 
-export default function AdminLayout(props: any) {
+export default function AdminLayout(props) {
   const { ...rest } = props;
   // states and functions
   const [fixed, setFixed] = useState(false);
@@ -34,7 +34,7 @@ export default function AdminLayout(props: any) {
     return window.location.pathname !== "/admin/full-screen-maps";
   };
 
-  const getActiveRoute = (routes: any): any => {
+  const getActiveRoute = (routes) => {
     let activeRoute = "Default Brand Text";
     for (let i = 0; i < routes.length; i++) {
       if (routes[i].collapse) {
@@ -57,14 +57,8 @@ export default function AdminLayout(props: any) {
     }
     return activeRoute;
   };
-
-  const getModuleRoute = () => {
-    let activeModule = "Module";
-    activeModule = window.location.pathname.split("/")[1];
-    return activeModule.charAt(0).toUpperCase() + activeModule.slice(1);
-  };
   // This changes navbar state(fixed or not)
-  const getActiveNavbar = (routes: any): any => {
+  const getActiveNavbar = (routes) => {
     let activeNavbar = false;
     for (let i = 0; i < routes.length; i++) {
       if (routes[i].category) {
@@ -85,8 +79,8 @@ export default function AdminLayout(props: any) {
     return activeNavbar;
   };
 
-  const getRoutes = (routes: any): any => {
-    return routes.map((prop: any, key: any) => {
+  const getRoutes = (routes) => {
+    return routes.map((prop, key) => {
       if (prop.collapse) {
         return getRoutes(prop.views);
       }
@@ -136,16 +130,13 @@ export default function AdminLayout(props: any) {
           xl: "calc(100% - 275px)",
         }}
       >
-        <Portal>
-          <AdminNavbar
-            onOpen={onOpen}
-            moduleText={getModuleRoute()}
-            brandText={getActiveRoute(routes)}
-            secondary={getActiveNavbar(routes)}
-            fixed={fixed}
-            {...rest}
-          />
-        </Portal>
+        <AdminNavbar
+          onOpen={onOpen}
+          brandText={getActiveRoute(routes)}
+          secondary={getActiveNavbar(routes)}
+          fixed={fixed}
+          {...rest}
+        />
         {getRoute() ? (
           <PanelContent>
             <PanelContainer>
@@ -162,7 +153,7 @@ export default function AdminLayout(props: any) {
           isOpen={isOpen}
           onClose={onClose}
           isChecked={fixed}
-          onSwitch={(value: any): any => {
+          onSwitch={(value) => {
             setFixed(value);
           }}
         />

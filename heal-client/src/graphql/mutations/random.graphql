@@ -7,16 +7,7 @@ mutation deleteType($id: Float!) {
 
 mutation addType($args: TypeArgs!) {
   addType(args: $args) {
-    status
-    error {
-      target
-      message
-    }
-    data {
-      id
-      name
-      description
-    }
+    ...BooleanResponse
   }
 }
 

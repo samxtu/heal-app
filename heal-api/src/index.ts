@@ -79,7 +79,6 @@ const main = async () => {
         TypeResolver,
       ],
       validate: true,
-      emitSchemaFile: true,
     }),
     context: ({ req, res }) => ({ req, res, redis, conn }),
   });

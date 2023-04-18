@@ -21,7 +21,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.TypeResolver = exports.BooleanResponseWithType = void 0;
+exports.TypeResolver = void 0;
 const isAuth_1 = require("../middleware/isAuth");
 const type_graphql_1 = require("type-graphql");
 const Type_1 = require("../entities/Type");
@@ -58,32 +58,23 @@ __decorate([
 TypeEditArgs = __decorate([
     (0, type_graphql_1.InputType)()
 ], TypeEditArgs);
-let BooleanResponseWithType = class BooleanResponseWithType extends user_1.BooleanResponse {
-};
-__decorate([
-    (0, type_graphql_1.Field)(() => Type_1.Type, { nullable: true }),
-    __metadata("design:type", Type_1.Type)
-], BooleanResponseWithType.prototype, "data", void 0);
-BooleanResponseWithType = __decorate([
-    (0, type_graphql_1.ObjectType)()
-], BooleanResponseWithType);
-exports.BooleanResponseWithType = BooleanResponseWithType;
 let TypeResolver = class TypeResolver {
     addType(inputArgs) {
-        return Type_1.Type.create({
-            name: inputArgs.name,
-            description: inputArgs.description,
-        })
-            .save()
-            .then((type) => {
-            return { status: true, type: type };
-        })
-            .catch((error) => {
-            console.error("we caught the error: ", error.message);
-            return {
-                status: false,
-                error: { target: "general", message: error.message },
-            };
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                yield Type_1.Type.create({
+                    name: inputArgs.name,
+                    description: inputArgs.description,
+                }).save();
+            }
+            catch (err) {
+                console.error(err.message);
+                return {
+                    status: false,
+                    error: { target: "general", message: err.message },
+                };
+            }
+            return { status: true };
         });
     }
     editType(id, editArgs) {
@@ -154,16 +145,16 @@ let TypeResolver = class TypeResolver {
         });
     }
     getTypes() {
-        return Type_1.Type.find({ relations: ["category"] });
+        return Type_1.Type.find({ relations: ["users"] });
     }
     getType(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            return Type_1.Type.findOne(id, { relations: ["category"] });
+            return Type_1.Type.findOne(id, { relations: ["users"] });
         });
     }
 };
 __decorate([
-    (0, type_graphql_1.Mutation)(() => BooleanResponseWithType),
+    (0, type_graphql_1.Mutation)(() => user_1.BooleanResponse),
     (0, type_graphql_1.UseMiddleware)(isAuth_1.isAuth),
     __param(0, (0, type_graphql_1.Arg)("args")),
     __metadata("design:type", Function),

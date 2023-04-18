@@ -22,7 +22,6 @@ export type Address = {
   country: Scalars['String'];
   createdAt: Scalars['String'];
   currentUsers: Array<User>;
-  deleted: Scalars['Boolean'];
   district: Scalars['String'];
   id: Scalars['Float'];
   permanentUsers: Array<User>;
@@ -38,17 +37,9 @@ export type BooleanResponse = {
   status: Scalars['Boolean'];
 };
 
-export type BooleanResponseWithType = {
-  __typename?: 'BooleanResponseWithType';
-  data?: Maybe<Type>;
-  error?: Maybe<FieldError>;
-  status: Scalars['Boolean'];
-};
-
 export type Category = {
   __typename?: 'Category';
   createdAt: Scalars['String'];
-  deleted: Scalars['Boolean'];
   id: Scalars['Float'];
   name: Scalars['String'];
   type: Type;
@@ -105,7 +96,6 @@ export type Employee = {
   contractEndDate: Scalars['String'];
   contractStartDate: Scalars['String'];
   createdAt: Scalars['String'];
-  deleted: Scalars['Boolean'];
   department: Scalars['String'];
   departmentLocation: Scalars['String'];
   designation: Scalars['String'];
@@ -133,7 +123,7 @@ export type Mutation = {
   addCategory: BooleanResponse;
   addPermission: BooleanResponse;
   addRole: BooleanResponse;
-  addType: BooleanResponseWithType;
+  addType: BooleanResponse;
   deleteCategory: BooleanResponse;
   deletePermission: BooleanResponse;
   deleteRole: BooleanResponse;
@@ -251,7 +241,6 @@ export type MutationResetPasswordArgs = {
 export type Permission = {
   __typename?: 'Permission';
   createdAt: Scalars['String'];
-  deleted: Scalars['Boolean'];
   id: Scalars['Float'];
   name: Scalars['String'];
   roles: Array<Role>;
@@ -304,7 +293,6 @@ export type RegisterUserArgs = {
 export type Role = {
   __typename?: 'Role';
   createdAt: Scalars['String'];
-  deleted: Scalars['Boolean'];
   id: Scalars['Float'];
   name: Scalars['String'];
   permissions: Array<Permission>;
@@ -321,7 +309,6 @@ export type Type = {
   __typename?: 'Type';
   category: Array<Category>;
   createdAt: Scalars['String'];
-  deleted: Scalars['Boolean'];
   description: Scalars['String'];
   id: Scalars['Float'];
   name: Scalars['String'];
@@ -383,7 +370,7 @@ export type AddTypeMutationVariables = Exact<{
 }>;
 
 
-export type AddTypeMutation = { __typename?: 'Mutation', addType: { __typename?: 'BooleanResponseWithType', status: boolean, error?: { __typename?: 'FieldError', target: string, message: string } | null, data?: { __typename?: 'Type', id: number, name: string, description: string } | null } };
+export type AddTypeMutation = { __typename?: 'Mutation', addType: { __typename?: 'BooleanResponse', status: boolean, error?: { __typename?: 'FieldError', target: string, message: string } | null } };
 
 export type EditTypeMutationVariables = Exact<{
   id: Scalars['Float'];
@@ -528,14 +515,14 @@ export type GetPermissionsQuery = { __typename?: 'Query', getPermissions: Array<
 export type GetTypesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetTypesQuery = { __typename?: 'Query', getTypes: Array<{ __typename?: 'Type', id: number, name: string, description: string, category: Array<{ __typename?: 'Category', id: number, name: string }> }> };
+export type GetTypesQuery = { __typename?: 'Query', getTypes: Array<{ __typename?: 'Type', id: number, name: string, category: Array<{ __typename?: 'Category', id: number, name: string }> }> };
 
 export type GetTypeQueryVariables = Exact<{
   id: Scalars['Float'];
 }>;
 
 
-export type GetTypeQuery = { __typename?: 'Query', getType?: { __typename?: 'Type', id: number, name: string, description: string, category: Array<{ __typename?: 'Category', id: number, name: string }> } | null };
+export type GetTypeQuery = { __typename?: 'Query', getType?: { __typename?: 'Type', id: number, name: string, category: Array<{ __typename?: 'Category', id: number, name: string }> } | null };
 
 export type GetRolesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -597,19 +584,10 @@ export function useDeleteTypeMutation() {
 export const AddTypeDocument = gql`
     mutation addType($args: TypeArgs!) {
   addType(args: $args) {
-    status
-    error {
-      target
-      message
-    }
-    data {
-      id
-      name
-      description
-    }
+    ...BooleanResponse
   }
 }
-    `;
+    ${BooleanResponseFragmentDoc}`;
 
 export function useAddTypeMutation() {
   return Urql.useMutation<AddTypeMutation, AddTypeMutationVariables>(AddTypeDocument);
@@ -857,7 +835,6 @@ export const GetTypesDocument = gql`
   getTypes {
     id
     name
-    description
     category {
       id
       name
@@ -874,7 +851,6 @@ export const GetTypeDocument = gql`
   getType(id: $id) {
     id
     name
-    description
     category {
       id
       name

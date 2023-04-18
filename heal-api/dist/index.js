@@ -76,7 +76,6 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
                 type_1.TypeResolver,
             ],
             validate: true,
-            emitSchemaFile: true,
         }),
         context: ({ req, res }) => ({ req, res, redis, conn }),
     });
